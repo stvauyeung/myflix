@@ -1,0 +1,8 @@
+%article.video_category
+  %header
+    %h3="Titles with '#{params[:q]}'"
+  .videos.row
+    - @videos.each do |v|
+      .video.span2
+        = link_to video_path(v) do
+          %img(src="#{v.small_cover_url}")
