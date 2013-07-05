@@ -1,0 +1,7 @@
+class User < ActiveRecord::Base
+  validates_presence_of :name, :email
+  validates :email, uniqueness: true, format: { :with => /@/, :on => :create}
+
+  has_secure_password
+  validates :password, presence: true, on: :create
+end
