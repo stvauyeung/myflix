@@ -25,3 +25,6 @@ Video.find(3).categories << c
 Video.find(4).categories << c2
 Video.find(5).categories << c2
 Video.find(6).categories << c2
+
+User.create(name: "Joe", email:"joe@joe.com", password: "password")
+User.create(name: "Molly", email:"molly@molly.com", password: "password")
