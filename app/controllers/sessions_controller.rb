@@ -1,15 +1,17 @@
 class SessionsController < ApplicationController
   def new
-    
+    if logged_in? == true
+      redirect_to home_path
+    end
   end
 
   def create
-    user = User.find_by_name(params[:name])
+    user = User.find_by_email(params[:email])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
       redirect_to home_path, :notice => "Welcome back, #{user.name}"
     else
-      flash.now[:error] = "Sorry, name or password was incorrect."
+      flash.now[:error] = "Sorry, email or password was incorrect."
       render 'sessions/new'
     end
   end

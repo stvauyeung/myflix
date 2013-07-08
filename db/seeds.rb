@@ -12,6 +12,10 @@ Video.create(title: "South Park", description: "A class of potty mouthed third g
 Video.create(title: "Pulp Fiction", description: "I will strike down upon thee with great vengeance and furious anger those who attempt to poison and destroy my brothers. And you will know my name is the Lord when I lay my vengeance upon thee.", small_cover_url: "/tmp/pulp_fiction.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
 Video.create(title: "Breaking Bad", description: "High school chemistry teacher, Walter White, is diagnosed with lung cancer. He turns to a life of crime, producing and selling methamphetamine with the aim of securing his family's financial future.", small_cover_url: "/tmp/breaking_bad.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
 Video.create(title: "Tomb Raider", description: "Lara Croft races against time and villains to recover a powerful artefact called the Triangle of Light.", small_cover_url: "/tmp/tomb_raider.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
+Video.create(title: "Pulp Fiction 2", description: "I will strike down upon thee with great vengeance and furious anger those who attempt to poison and destroy my brothers. And you will know my name is the Lord when I lay my vengeance upon thee.", small_cover_url: "/tmp/pulp_fiction.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
+Video.create(title: "Breaking Bad 2", description: "High school chemistry teacher, Walter White, is diagnosed with lung cancer. He turns to a life of crime, producing and selling methamphetamine with the aim of securing his family's financial future.", small_cover_url: "/tmp/breaking_bad.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
+Video.create(title: "Tomb Raider 2", description: "Lara Croft races against time and villains to recover a powerful artefact called the Triangle of Light.", small_cover_url: "/tmp/tomb_raider.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
+Video.create(title: "Tomb Raider 3", description: "Lara Croft races against time and villains to recover a powerful artefact called the Triangle of Light.", small_cover_url: "/tmp/tomb_raider.jpg", large_cover_url: "/tmp/mad_men_large.jpg")
 
 Category.create(name: "Action")
 Category.create(name: "Comedy")
@@ -25,6 +29,10 @@ Video.find(3).categories << c
 Video.find(4).categories << c2
 Video.find(5).categories << c2
 Video.find(6).categories << c2
+Video.find(7).categories << c2
+Video.find(8).categories << c2
+Video.find(9).categories << c2
+Video.find(10).categories << c2
 
 User.create(name: "Joe", email:"joe@joe.com", password: "password")
 User.create(name: "Molly", email:"molly@molly.com", password: "password")

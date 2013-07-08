@@ -6,7 +6,7 @@ class Video < ActiveRecord::Base
   validates_uniqueness_of :title
 
   def self.search_by_title(search)
-    query = "%" + search + "%"
-    find(:all, :conditions => ['title LIKE ?', query])  
+    return [] if search.blank?
+    where("title LIKE ?", "%#{search}%").order('created_at DESC')
   end
 end
