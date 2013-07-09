@@ -1,0 +1,13 @@
+%section.register.container
+  .row
+    .span10.offset1
+      =bootstrap_form_for @user, html: { class: 'form-horizontal'} do |f|
+        %header
+          %h1 Register
+        %fieldset
+          =f.text_field :name, label: "Full Name"
+          =f.text_field :email
+          =f.password_field :password
+          =f.password_field :password_confirmation, label: "Confirm Password"
+          =f.actions do
+            =f.secondary "Register"
