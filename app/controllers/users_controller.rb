@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   def new
-    @user = User.new
+    if logged_in?
+      redirect_to home_path
+    else
+      @user = User.new
+    end
   end
 
   def create

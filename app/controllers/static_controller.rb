@@ -1,6 +1,6 @@
 class StaticController < ApplicationController
   def front
-    if logged_in? == true
+    if logged_in?
       redirect_to home_path
     end
   end
