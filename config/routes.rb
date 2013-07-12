@@ -11,6 +11,7 @@ Myflix::Application.routes.draw do
   resources :users, :only => [:create]
 
   resources :videos, :only => [:show] do
+    resources :reviews, :only => [:new, :create]
     collection do
       post :search, to: "videos#search"
     end
