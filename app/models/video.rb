@@ -1,7 +1,7 @@
 class Video < ActiveRecord::Base
   has_many :categorizations
   has_many :categories, through: :categorizations
-  has_many :reviews
+  has_many :reviews, order: "created_at DESC"
 
   validates_presence_of :title, :description
   validates_uniqueness_of :title
@@ -12,12 +12,12 @@ class Video < ActiveRecord::Base
   end
 
   def average_rating
-    if reviews.count > 1
+    if reviews.count > 0
       total_ratings = 0
       reviews.each do |r|
           total_ratings += r.rating unless r.rating.nil?
       end
-      "#{(total_ratings/reviews.count)}/5"
+      total_ratings/reviews.count
     else
       "Not Rated"
     end

@@ -6,7 +6,7 @@
       .video_info.span3
         %header
           %h3= @video.title
-          %span= "Rating: #{@video.average_rating}"
+          %span= "Rating: #{@video.average_rating}/5"
         %p= @video.description
         .actions
           %a.btn.btn-primary(href="") Watch Now
@@ -15,19 +15,19 @@
 %section.reviews.container
   .row
     .span10.offset1
-      =form_for [@video, @review] do |f|
+      =form_for [@video, Review.new] do |f|
         %fieldset
           %label Rate this video
-          =f.select :rating, options_for_select([["5 Stars", 5], ["4 Stars", 4], ["3 Stars", 3], ["2 Stars", 2], ["1 Stars", 1]])
+          =f.select :rating, options_for_select([5,4,3,2,1].map { |num| [pluralize(num, "Star")] })
           =f.label "Write Review"
           =f.text_area :content, :rows => 6, :class => "span6"
         %fieldset.actions.clearfix
           %input(type="submit" value="Submit" class="btn")
           %a(href="") Cancel
       %header
-        %h3= "User Reviews (#{@video.reviews.count})"
+        %h3= "User Reviews (#{@reviews.count})"
       %ul
-        - @reviews.reverse_each do |review|
+        - @reviews.each do |review|
           %article.review
             %li.row
               .span2
