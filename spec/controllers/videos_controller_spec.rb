@@ -1,22 +1,34 @@
 require 'spec_helper'
 
 describe VideosController do
-  before do
-    lebowski = Video.create(title: "The Big Lebowski", description: "A 1998 comedy film written and directed by Joel and Ethan Coen")
-    fish = Video.create(title: "Big Fish", description: "Fantasy adventure film based on the 1998 novel of the same name by Daniel Wallace. ")
-      
-    user = User.create(name: "joe", email: "j@j.com", password: "password")
-    session[:user_id] = user.id
+  let(:video) { Fabricate(:video, title: "Futurama") }
+
+  describe "GET show" do
+    it "sets @video for authenticated user" do
+      session[:user_id] = Fabricate(:user).id
+      get :show, :id => video.id
+      expect(assigns(:video)).to eq(video)
+    end
+    it "sets @reviews for authenticated user" do
+      session[:user_id] = Fabricate(:user).id
+      get :show, :id => video.id
+      expect(assigns(:reviews)).to eq(video.reviews)
+    end
+    it "redirects to login path for unauthenticated user" do
+      get :show, :id => video.id
+      expect(response).to redirect_to(login_path)
+    end
   end
 
-  describe "#search" do
-    it "populates an array of videos" do
-      post :search, :q => "big"
-      expect(assigns[:videos]).to match_array(Video.search_by_title("big"))
+  describe "POST search" do
+    it "populates an array of videos for signed in user" do
+      session[:user_id] = Fabricate(:user).id
+      post :search, :q => "rama"
+      expect(assigns[:videos]).to eq([video])
     end
-    it "renders the :search view" do
-      post :search, :q => ""
-      expect(response).to render_template :search
+    it "redirects to login path for non signed in user" do
+      post :search, :q => "rama"
+      expect(response).to redirect_to(login_path)
     end
   end
 end

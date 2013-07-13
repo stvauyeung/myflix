@@ -9,4 +9,6 @@ describe User do
   it { should allow_value("j@aol.com").for(:email)}
 
   it { should validate_presence_of(:password_digest) }
+
+  it { should have_many(:reviews) }
 end

@@ -1,8 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    if logged_in?
-      redirect_to home_path
-    end
+    redirect_to home_path if logged_in?
   end
 
   def create
@@ -12,12 +10,12 @@ class SessionsController < ApplicationController
       redirect_to home_path, :notice => "Welcome back, #{user.name}"
     else
       flash.now[:error] = "Sorry, email or password was incorrect."
-      render 'sessions/new'
+      render :new
     end
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to '/', :notice => "You've been successfully logged out."
+    redirect_to root_path, :notice => "You've been successfully logged out."
   end
 end
