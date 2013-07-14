@@ -18,4 +18,5 @@ Myflix::Application.routes.draw do
   end
   
   resources :categories, :only => [:show]
+  resources :queuings, :only => [:create]
 end
