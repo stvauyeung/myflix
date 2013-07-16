@@ -6,6 +6,8 @@ class Video < ActiveRecord::Base
   validates_presence_of :title, :description
   validates_uniqueness_of :title
 
+  has_many :queuings
+
   def self.search_by_title(search)
     return [] if search.blank?
     where("title LIKE ?", "%#{search}%").order('created_at DESC')

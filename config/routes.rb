@@ -9,6 +9,7 @@ Myflix::Application.routes.draw do
   
   get '/register', to: 'users#new'
   resources :users, :only => [:create]
+  resources :queuings, :only => [:create, :index]
 
   resources :videos, :only => [:show] do
     resources :reviews, :only => [:create]
@@ -18,5 +19,4 @@ Myflix::Application.routes.draw do
   end
   
   resources :categories, :only => [:show]
-  resources :queuings, :only => [:create]
 end
