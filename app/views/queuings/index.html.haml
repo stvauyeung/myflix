@@ -26,6 +26,6 @@
                 %td
                   = link_to queuing.category_name, queuing.category
                 %td
-                  = link_to queuing_path(id: queuing.id), method: :delete, confirm: "Are you sure you want remove #{queuing.video_title} from your queue?" do
+                  = link_to queuing, method: :delete, confirm: "Are you sure you want remove #{queuing.video_title} from your queue?" do
                     %i.icon-remove
         = button_to "Update Instant Queue", nil, class: "btn"

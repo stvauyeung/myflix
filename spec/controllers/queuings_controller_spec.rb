@@ -48,15 +48,17 @@ describe QueuingsController do
       end
     end
 
-    describe "DELETE" do
+    describe "DELETE destroy" do
       let(:queuing) { Fabricate(:queuing, user: current_user, video: video) }
-      it "destroys queuing for user" do
+      it "destroys queuing item" do
         delete :destroy, id: queuing.id
-        expect(current_user.queuings.count).to eq(0)
+        expect(Queuing.count).to eq(0)
       end
-      it "destroys queuing for video" do
+      it "does not delete if queue item is not in current_user queue" do
+        another_user = Fabricate(:user)
+        session[:user_id] = another_user.id
         delete :destroy, id: queuing.id
-        expect(video.queuings.count).to eq(0)
+        expect(Queuing.first).to eq(queuing)
       end
       it "redirects to queuing page" do
         delete :destroy, id: queuing.id
@@ -76,7 +78,7 @@ describe QueuingsController do
         get :index
         expect(response).to redirect_to login_path
       end
-      it "DELETE" do
+      it "DELETE destroy" do
         get :destroy, id: queuing.id
         expect(response).to redirect_to login_path
       end

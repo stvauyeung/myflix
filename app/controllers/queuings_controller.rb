@@ -14,7 +14,7 @@ class QueuingsController < ApplicationController
 
   def destroy
     queuing = Queuing.find(params[:id])
-    queuing.destroy
+    queuing.destroy unless queuing.user != current_user
     redirect_to queuings_path
   end
 
