@@ -30,7 +30,11 @@ describe QueuingsController do
         hulk_queuing = Queuing.where(video_id: hulk.id, user_id: current_user.id).first
         expect(hulk_queuing.position).to eq(2)
       end
-      it "should not add a video to queue if video is in queue"
+      it "should not add a video to queue if video is in queue" do
+        Fabricate(:queuing, user: current_user, video: video)
+        post :create, video_id: video.id
+        expect(current_user.queuings.count).to eq(1)
+      end
     end
 
     describe "GET index" do
@@ -43,9 +47,26 @@ describe QueuingsController do
         expect(assigns[:queuings]).to match_array(current_user.queuings)
       end
     end
+
+    describe "DELETE" do
+      let(:queuing) { Fabricate(:queuing, user: current_user, video: video) }
+      it "destroys queuing for user" do
+        delete :destroy, id: queuing.id
+        expect(current_user.queuings.count).to eq(0)
+      end
+      it "destroys queuing for video" do
+        delete :destroy, id: queuing.id
+        expect(video.queuings.count).to eq(0)
+      end
+      it "redirects to queuing page" do
+        delete :destroy, id: queuing.id
+        expect(response).to redirect_to queuings_path
+      end
+    end
   end
   context "with unauthenticated user" do
     let(:video) { Fabricate(:video) }
+    let(:queuing) { Fabricate(:queuing) }
     describe "redirects to login path for POST create and GET index" do
       it "POST create" do
         post :create, video_id: video.id
@@ -53,6 +74,10 @@ describe QueuingsController do
       end
       it "GET index" do
         get :index
+        expect(response).to redirect_to login_path
+      end
+      it "DELETE" do
+        get :destroy, id: queuing.id
         expect(response).to redirect_to login_path
       end
     end
