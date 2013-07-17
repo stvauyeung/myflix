@@ -66,7 +66,7 @@ describe QueuingsController do
       end
     end
   end
-  context "with unauthenticated user" do
+  context "unauthenticated user" do
     let(:video) { Fabricate(:video) }
     let(:queuing) { Fabricate(:queuing) }
     describe "redirects to login path for POST create and GET index" do
@@ -79,7 +79,7 @@ describe QueuingsController do
         expect(response).to redirect_to login_path
       end
       it "DELETE destroy" do
-        get :destroy, id: queuing.id
+        delete :destroy, id: queuing.id
         expect(response).to redirect_to login_path
       end
     end

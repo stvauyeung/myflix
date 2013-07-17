@@ -1,4 +1,4 @@
 Fabricator(:queuing) do
-  user_id { Fabricate(:user).id }
-  video_id { Fabricate(:video).id }
+  user { Fabricate(:user) }
+  video { Fabricate(:video) }
 end
