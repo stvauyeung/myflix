@@ -4,6 +4,7 @@ class Queuing < ActiveRecord::Base
 
   validates :user_id, presence: true
   validates :video_id, presence: true
+  validates_numericality_of :position, only_integer: true
 
   delegate :title, to: :video, prefix: :video
 

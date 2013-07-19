@@ -19,9 +19,9 @@ describe QueuingsController do
         post :create, video_id: video.id
         expect(Queuing.first.video_id).to eq(video.id)
       end
-      it "redirects to video page" do #may change to redirect to queuings_path
+      it "redirects to queuings index" do
         post :create, video_id: video.id
-        expect(response).to redirect_to video_path(video)
+        expect(response).to redirect_to queuings_path
       end
       it "puts video as last in queue" do
         hulk = Fabricate(:video)
@@ -49,7 +49,7 @@ describe QueuingsController do
     end
 
     describe "DELETE destroy" do
-      let(:queuing) { Fabricate(:queuing, user: current_user, video: video) }
+      let(:queuing) { Fabricate(:queuing, user: current_user, video: video, position: 1) }
       it "destroys queuing item" do
         delete :destroy, id: queuing.id
         expect(Queuing.count).to eq(0)
@@ -63,6 +63,11 @@ describe QueuingsController do
       it "redirects to queuing page" do
         delete :destroy, id: queuing.id
         expect(response).to redirect_to queuings_path
+      end
+      it "normalizes queuing positions" do
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        delete :destroy, id: queuing.id
+        expect(queuing2.reload.position).to eq(1)
       end
     end
   end
@@ -81,6 +86,75 @@ describe QueuingsController do
       it "DELETE destroy" do
         delete :destroy, id: queuing.id
         expect(response).to redirect_to login_path
+      end
+    end
+  end
+
+  describe "PUT update_multiple" do
+    context "with valid inputs" do
+      let(:current_user) { Fabricate(:user) }
+      before do
+        session[:user_id] = current_user.id
+      end
+      it "redirects to queuings_path" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"3"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"1"}]
+        expect(response).to redirect_to queuings_path
+      end
+      it "updates positions of queuings with queuing_updates" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"3"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"1"}]
+        expect(current_user.queuings).to eq([queuing3, queuing2, queuing1])
+      end
+      it "normalizes the position numbers" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"4"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"3"}]
+        expect(current_user.queuings.map(&:position)).to match_array([1, 2, 3])
+      end
+    end
+    context "with invalid inputs" do
+      let(:current_user) { Fabricate(:user) }
+      before { session[:user_id] = current_user }
+      it "redirects to queuings path" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"q"}, {"id"=>"2", "position"=>"1"}]
+        expect(response).to redirect_to(queuings_path)
+      end
+      it "displays flash message with error" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"q"}, {"id"=>"2", "position"=>"1"}]
+        expect(flash[:error]).to be_present
+      end
+      it "does not change the queuing positions" do
+        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"q"}]
+        expect(queuing1.reload.position).to eq(1)
+      end
+    end
+    context "with unauthenticated user" do
+      it "should redirect to login path" do
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"1"}]
+        expect(response).to redirect_to login_path
+      end
+    end
+    context "with queuings that do not belong to the current user" do
+      it "only updates queuings that belong to current user" do
+        current_user = Fabricate(:user)
+        another_user = Fabricate(:user)
+        session[:user_id] = current_user
+        queuing1 = Fabricate(:queuing, user: another_user, position: 1)
+        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
+        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"1"}]
+        expect(queuing1.reload.position).to eq(1)
       end
     end
   end

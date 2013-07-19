@@ -6,5 +6,5 @@ class User < ActiveRecord::Base
   validates :password, presence: true, on: :create
 
   has_many :reviews
-  has_many :queuings
+  has_many :queuings, order: :position
 end

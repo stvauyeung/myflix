@@ -10,5 +10,6 @@ describe User do
 
   it { should validate_presence_of(:password_digest) }
 
+  it { should have_many(:queuings).order(:position) }
   it { should have_many(:reviews) }
 end
