@@ -14,15 +14,15 @@ class QueuingsController < ApplicationController
 
   def destroy
     queuing = Queuing.find(params[:id])
-    queuing.destroy unless queuing.user != current_user
-    normalize_queuing_positions
+    queuing.destroy if queuing.user == current_user
+    current_user.normalize_queuing_positions
     redirect_to queuings_path
   end
 
   def update_multiple
     begin
-      update_queuing_positions
-      normalize_queuing_positions
+      current_user.update_queuings(params[:queuing_updates])
+      current_user.normalize_queuing_positions
     rescue ActiveRecord::RecordInvalid
       flash[:error] = "Please input valid position numbers only"
     end
@@ -41,20 +41,5 @@ class QueuingsController < ApplicationController
 
   def queuings_include?(video)
     current_user.queuings.map(&:video).include?(video)
-  end
-
-  def update_queuing_positions
-    ActiveRecord::Base.transaction do
-      params[:queuing_updates].each do |hash|
-        queuing = Queuing.find(hash["id"])
-        queuing.update_attributes!(position: hash["position"]) if queuing.user == current_user
-      end
-    end 
-  end
-
-  def normalize_queuing_positions
-    current_user.queuings.each_with_index do |queuing, index|
-      queuing.update_attributes(position: index + 1)
-    end 
   end
 end

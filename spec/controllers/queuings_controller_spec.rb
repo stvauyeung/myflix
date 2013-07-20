@@ -93,50 +93,40 @@ describe QueuingsController do
   describe "PUT update_multiple" do
     context "with valid inputs" do
       let(:current_user) { Fabricate(:user) }
+      let(:queuing1) {  Fabricate(:queuing, user: current_user, position: 1) }
+      let(:queuing2) {  Fabricate(:queuing, user: current_user, position: 2) }
+      let(:queuing3) {  Fabricate(:queuing, user: current_user, position: 3) }
       before do
         session[:user_id] = current_user.id
       end
       it "redirects to queuings_path" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"3"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"1"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"3"}, {"id"=>queuing2.id, "position"=>"2"}, {"id"=>queuing3.id, "position"=>"1"}]
         expect(response).to redirect_to queuings_path
       end
       it "updates positions of queuings with queuing_updates" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"3"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"1"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"3"}, {"id"=>queuing2.id, "position"=>"2"}, {"id"=>queuing3.id, "position"=>"1"}]
         expect(current_user.queuings).to eq([queuing3, queuing2, queuing1])
       end
       it "normalizes the position numbers" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        queuing3 = Fabricate(:queuing, user: current_user, position: 3)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"4"}, {"id"=>"2", "position"=>"2"}, {"id"=>"3", "position"=>"3"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"3"}, {"id"=>queuing2.id, "position"=>"2"}, {"id"=>queuing3.id, "position"=>"1"}]
         expect(current_user.queuings.map(&:position)).to match_array([1, 2, 3])
       end
     end
     context "with invalid inputs" do
       let(:current_user) { Fabricate(:user) }
+      let(:queuing1) { Fabricate(:queuing, user: current_user, position: 1) }
+      let(:queuing2) { Fabricate(:queuing, user: current_user, position: 2) }
       before { session[:user_id] = current_user }
       it "redirects to queuings path" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"q"}, {"id"=>"2", "position"=>"1"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"q"}, {"id"=>queuing2.id, "position"=>"1"}]
         expect(response).to redirect_to(queuings_path)
       end
       it "displays flash message with error" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"q"}, {"id"=>"2", "position"=>"1"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"q"}, {"id"=>queuing2.id, "position"=>"1"}]
         expect(flash[:error]).to be_present
       end
       it "does not change the queuing positions" do
-        queuing1 = Fabricate(:queuing, user: current_user, position: 1)
-        queuing2 = Fabricate(:queuing, user: current_user, position: 2)
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"q"}]
+        put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"2"}, {"id"=>queuing2.id, "position"=>"q"}]
         expect(queuing1.reload.position).to eq(1)
       end
     end

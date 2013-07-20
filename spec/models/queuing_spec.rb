@@ -14,19 +14,45 @@ describe Queuing do
     end
   end
 
-  describe "#user_rating" do
+  describe "#rating" do
     it "returns the user's rating of video if rated" do
       video = Fabricate(:video)
       user = Fabricate(:user)
       review = Fabricate(:review, user: user, video: video, rating: 3)
       queuing = Queuing.create(user: user, video: video)
-      expect(queuing.user_rating).to eq(3)
+      expect(queuing.rating).to eq(3)
     end
     it "returns nil if video not rated by user" do
       video = Fabricate(:video)
       user = Fabricate(:user)
       queuing = Queuing.create(user: user, video: video)
-      expect(queuing.user_rating).to eq(nil)
+      expect(queuing.rating).to eq(nil)
+    end
+  end
+
+  describe "#rating=" do
+    it "changes the rating of review if review is present" do
+      video = Fabricate(:video)
+      bob = Fabricate(:user)
+      review = Fabricate(:review, user: bob, video: video, rating: 2)
+      queuing = Fabricate(:queuing, user: bob, video: video)
+      queuing.rating = 4
+      expect(Review.first.rating).to eq(4)
+    end
+    it "clears the rating of review if review is present" do
+      video = Fabricate(:video)
+      bob = Fabricate(:user)
+      review = Fabricate(:review, user: bob, video: video, rating: 2)
+      queuing = Fabricate(:queuing, user: bob, video: video)
+      queuing.rating = nil
+      expect(Review.first.rating).to be_nil
+    end
+    it "creates the rating of review if review not present" do
+      video = Fabricate(:video)
+      bob = Fabricate(:user)
+      queuing = Fabricate(:queuing, user: bob, video: video)
+      queuing.rating = 3
+      expect(Review.first.rating).to eq(3)
     end
   end
 
