@@ -60,7 +60,7 @@ describe QueuingsController do
     end
 
     describe "DELETE destroy" do
-      let(:queuing) { Fabricate(:queuing, user: User.find(1), video: video, position: 1) }
+      let(:queuing) { Fabricate(:queuing, user: current_user, video: video, position: 1) }
       it "destroys queuing item" do
         delete :destroy, id: queuing.id
         expect(Queuing.count).to eq(0)
