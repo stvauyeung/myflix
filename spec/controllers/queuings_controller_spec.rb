@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe QueuingsController do
   context "with authenticated user" do
-    let(:current_user) { Fabricate(:user) }
+    before { set_current_user }
     let(:video) { Fabricate(:video) }
-    before { session[:user_id] = current_user.id }
 
     describe "POST create" do
       it "creates a new queuing" do
@@ -35,6 +34,12 @@ describe QueuingsController do
         post :create, video_id: video.id
         expect(current_user.queuings.count).to eq(1)
       end
+
+      context "not signed in" do
+        it_behaves_like "require sign in" do
+          let(:action) { post :create, video_id: video.id }
+        end
+      end
     end
 
     describe "GET index" do
@@ -46,10 +51,16 @@ describe QueuingsController do
         get :index
         expect(assigns[:queuings]).to match_array(current_user.queuings)
       end
+
+      context "not signed in" do
+        it_behaves_like "require sign in" do
+          let(:action) { get :index }
+        end
+      end
     end
 
     describe "DELETE destroy" do
-      let(:queuing) { Fabricate(:queuing, user: current_user, video: video, position: 1) }
+      let(:queuing) { Fabricate(:queuing, user: User.find(1), video: video, position: 1) }
       it "destroys queuing item" do
         delete :destroy, id: queuing.id
         expect(Queuing.count).to eq(0)
@@ -69,36 +80,23 @@ describe QueuingsController do
         delete :destroy, id: queuing.id
         expect(queuing2.reload.position).to eq(1)
       end
-    end
-  end
-  context "unauthenticated user" do
-    let(:video) { Fabricate(:video) }
-    let(:queuing) { Fabricate(:queuing) }
-    describe "redirects to login path for POST create and GET index" do
-      it "POST create" do
-        post :create, video_id: video.id
-        expect(response).to redirect_to login_path
-      end
-      it "GET index" do
-        get :index
-        expect(response).to redirect_to login_path
-      end
-      it "DELETE destroy" do
-        delete :destroy, id: queuing.id
-        expect(response).to redirect_to login_path
+
+      context "user not signed in" do
+        it_behaves_like "require sign in" do
+          let(:action) { delete :destroy, id: queuing.id }
+        end
       end
     end
   end
 
   describe "PUT update_multiple" do
+    before { set_current_user }
+
     context "with valid inputs" do
-      let(:current_user) { Fabricate(:user) }
       let(:queuing1) {  Fabricate(:queuing, user: current_user, position: 1) }
       let(:queuing2) {  Fabricate(:queuing, user: current_user, position: 2) }
       let(:queuing3) {  Fabricate(:queuing, user: current_user, position: 3) }
-      before do
-        session[:user_id] = current_user.id
-      end
+
       it "redirects to queuings_path" do
         put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"3"}, {"id"=>queuing2.id, "position"=>"2"}, {"id"=>queuing3.id, "position"=>"1"}]
         expect(response).to redirect_to queuings_path
@@ -113,10 +111,10 @@ describe QueuingsController do
       end
     end
     context "with invalid inputs" do
-      let(:current_user) { Fabricate(:user) }
-      let(:queuing1) { Fabricate(:queuing, user: current_user, position: 1) }
-      let(:queuing2) { Fabricate(:queuing, user: current_user, position: 2) }
-      before { session[:user_id] = current_user }
+      let(:queuing1) {  Fabricate(:queuing, user: current_user, position: 1) }
+      let(:queuing2) {  Fabricate(:queuing, user: current_user, position: 2) }
+      let(:queuing3) {  Fabricate(:queuing, user: current_user, position: 3) }
+
       it "redirects to queuings path" do
         put :update_multiple, queuing_updates: [{"id"=>queuing1.id, "position"=>"q"}, {"id"=>queuing2.id, "position"=>"1"}]
         expect(response).to redirect_to(queuings_path)
@@ -130,17 +128,17 @@ describe QueuingsController do
         expect(queuing1.reload.position).to eq(1)
       end
     end
+
     context "with unauthenticated user" do
-      it "should redirect to login path" do
-        put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"1"}]
-        expect(response).to redirect_to login_path
+      it_behaves_like "require sign in" do
+        let(:action) { put :update_multiple }
       end
     end
+
     context "with queuings that do not belong to the current user" do
+      before { set_current_user }
       it "only updates queuings that belong to current user" do
-        current_user = Fabricate(:user)
         another_user = Fabricate(:user)
-        session[:user_id] = current_user
         queuing1 = Fabricate(:queuing, user: another_user, position: 1)
         queuing2 = Fabricate(:queuing, user: current_user, position: 2)
         put :update_multiple, queuing_updates: [{"id"=>"1", "position"=>"2"}, {"id"=>"2", "position"=>"1"}]
