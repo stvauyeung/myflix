@@ -4,17 +4,28 @@ class QueuingsController < ApplicationController
   def create
     video = Video.find(params[:video_id])
     queue_video(video)
-    redirect_to video_path(video)
+    redirect_to queuings_path
   end
 
   def index
     @user = current_user
-    @queuings = @user.queuings
+    @queuings = current_user.queuings
   end
 
   def destroy
     queuing = Queuing.find(params[:id])
-    queuing.destroy unless queuing.user != current_user
+    queuing.destroy if queuing.user == current_user
+    current_user.normalize_queuing_positions
+    redirect_to queuings_path
+  end
+
+  def update_multiple
+    begin
+      current_user.update_queuings(params[:queuing_updates])
+      current_user.normalize_queuing_positions
+    rescue ActiveRecord::RecordInvalid
+      flash[:error] = "Please input valid position numbers only"
+    end
     redirect_to queuings_path
   end
 
