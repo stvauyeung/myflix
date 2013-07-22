@@ -4,11 +4,7 @@ feature "Signing in" do
 	background { Fabricate(:user, email: "bob@yahoo.com")}
 
 	scenario "signing in with correct credentials" do
-		visit "/login"
-		fill_in "Email", with: "bob@yahoo.com"
-		fill_in "Password", with: "password"
-		click_button "Login"
-		expect(page).to have_content "Welcome back"
+		sign_in_user
 	end
 
 	scenario "signing in with incorrect credentials" do

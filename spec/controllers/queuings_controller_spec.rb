@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe QueuingsController do
   context "with authenticated user" do
-    before { set_current_user }
+    let(:jack) { Fabricate(:user) }
+    before { set_current_user(jack) }
     let(:video) { Fabricate(:video) }
 
     describe "POST create" do
@@ -60,14 +61,16 @@ describe QueuingsController do
     end
 
     describe "DELETE destroy" do
-      let(:queuing) { Fabricate(:queuing, user: current_user, video: video, position: 1) }
+      let(:queuing) { Fabricate(:queuing, user_id: jack.id, video_id: video.id, position: 1) }
+      
       it "destroys queuing item" do
+        set_current_user(jack)
         delete :destroy, id: queuing.id
-        expect(Queuing.count).to eq(0)
+        expect(jack.queuings.count).to eq(0)
       end
       it "does not delete if queue item is not in current_user queue" do
         another_user = Fabricate(:user)
-        session[:user_id] = another_user.id
+        set_current_user(another_user)
         delete :destroy, id: queuing.id
         expect(Queuing.first).to eq(queuing)
       end

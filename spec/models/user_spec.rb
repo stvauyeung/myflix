@@ -12,4 +12,18 @@ describe User do
 
   it { should have_many(:queuings).order(:position) }
   it { should have_many(:reviews) }
+
+  describe "#in_queuings?" do
+  	it "returns true if video is in user queuings" do
+  		user = Fabricate(:user)
+  		video = Fabricate(:video)
+  		Fabricate(:queuing, user: user, video: video)
+  		user.in_queuings?(video).should be_true
+  	end
+  	it "returns false if video is not in user queuings" do
+  		user = Fabricate(:user)
+  		video = Fabricate(:video)
+  		user.in_queuings?(video).should be_false
+  	end
+  end
 end

@@ -22,4 +22,8 @@ class User < ActiveRecord::Base
       queuing.update_attributes(position: index + 1)
     end 
   end
+
+  def in_queuings?(video)
+    queuings.map(&:video).include?(video)
+  end
 end
