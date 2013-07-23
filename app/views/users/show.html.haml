@@ -30,7 +30,7 @@
             %li.row
               .span2
                 %p
-                  = link_to "\"#{review.video_title}\""
+                  = link_to "\"#{review.video_title}\"", video_path(review.video)
                 %span= "Rating: #{review.rating} / 5"
               .span8
                 %p= review.content
