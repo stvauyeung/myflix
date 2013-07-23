@@ -12,4 +12,10 @@ class UsersController < ApplicationController
       render :action => :new
     end
   end
+
+  def show
+    @user = User.find(params[:id])
+    @queuings = @user.queuings
+    @reviews = @user.reviews
+  end
 end
