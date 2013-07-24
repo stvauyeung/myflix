@@ -13,6 +13,9 @@ describe User do
   it { should have_many(:queuings).order(:position) }
   it { should have_many(:reviews) }
 
+  it { should have_many(:followings) }
+  it { should have_many(:followers).through(:followings)}
+
   describe "#in_queuings?" do
   	it "returns true if video is in user queuings" do
   		user = Fabricate(:user)

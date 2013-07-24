@@ -59,6 +59,8 @@ describe UsersController do
       get :show, id: joe.id
       expect(assigns(:reviews)).to eq(joe.reviews)
     end
-    # it_behaves_like "require sign in"
+    it_behaves_like "require sign in" do
+      let(:action) { get :show, id: joe.id }
+    end
   end
 end

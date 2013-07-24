@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :reviews
   has_many :queuings, order: :position
 
+  has_many :followings
+  has_many :followers, through: :followings
+
   def update_queuings(queuing_updates)
     ActiveRecord::Base.transaction do
       queuing_updates.each do |hash|
