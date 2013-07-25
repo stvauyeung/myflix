@@ -26,4 +26,21 @@ describe FollowingsController do
 			expect(Following.count).to eq(1)
 		end
 	end
+
+	describe "POST create" do
+		let(:bob) { Fabricate(:user) }
+		let(:joe) { Fabricate(:user) }
+		before { set_current_user(bob) }
+		it "creates a new followings" do
+			post :create, user_id: joe.id
+			expect(Following.count).to eq(1)
+		end
+		it "sets current user as follower" do
+			post :create, user_id: joe.id
+			expect(Following.first.follower).to eq(bob)
+		end
+		it_behaves_like "require sign in" do
+			let(:action) { post :create, user_id: joe.id}
+		end
+	end
 end

@@ -10,7 +10,7 @@ Myflix::Application.routes.draw do
   get '/register', to: 'users#new'
   resources :users, :only => [:create, :show]
   resources :queuings, :only => [:create, :index, :destroy]
-  resources :followings, :only => [:index, :destroy]
+  resources :followings, :only => [:create, :index, :destroy]
   
   put :update_multiple, to: "queuings#update_multiple"
 

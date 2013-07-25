@@ -40,4 +40,16 @@ describe User do
       bob.is_following.should match_array([f1, f2])
     end
   end
+
+  describe "#follows?" do
+    let(:bob) { Fabricate(:user) }
+    let(:molly) { Fabricate(:user) }
+    before { Fabricate(:following, user: bob, follower: molly) }
+    it "returns true of user is following" do
+      molly.follows?(bob).should be_true
+    end
+    it "returns false if user not following " do
+      bob.follows?(molly).should be_false
+    end
+  end
 end

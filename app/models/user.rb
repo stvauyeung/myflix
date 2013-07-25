@@ -33,4 +33,8 @@ class User < ActiveRecord::Base
   def is_following
     Following.where(follower_id: self.id)
   end
+
+  def follows?(user)
+    is_following.map(&:user_id).include?(user.id)
+  end
 end

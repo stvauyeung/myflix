@@ -5,7 +5,7 @@
         %header
           %img(src="http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest('@user.email'.downcase)}?s=40")
           %h2= "#{@user.name}'s video collections (#{@user.queuings.count})"
-          %button.btn Follow
+          =button_to "Follow", followings_path(user_id: @user.id), action: :post, method: :create, class: "btn pull-right" unless current_user.follows?(@user)
         %table.table
           %thead
             %tr
