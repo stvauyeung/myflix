@@ -32,6 +32,6 @@
             %li.row
               .span2
                 %span= "Rating: #{review.rating} / 5"
-                %p= "by #{review.user.name}"
+                %p=link_to review.user.name, user_path(review.user)
               .span8
                 %p= review.content
