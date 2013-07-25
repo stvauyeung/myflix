@@ -29,4 +29,8 @@ class User < ActiveRecord::Base
   def in_queuings?(video)
     queuings.map(&:video).include?(video)
   end
+
+  def is_following
+    Following.where(follower_id: self.id)
+  end
 end

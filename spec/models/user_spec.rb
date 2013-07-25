@@ -29,4 +29,15 @@ describe User do
   		user.in_queuings?(video).should be_false
   	end
   end
+  describe "#is_following" do
+    it "returns all followings where user is the follower" do
+      bob = Fabricate(:user)
+      molly = Fabricate(:user)
+      joe = Fabricate(:user)
+      f1 = Fabricate(:following, follower_id: bob.id, user_id: molly.id)
+      f2 = Fabricate(:following, follower_id: bob.id, user_id: joe.id)
+      f3 = Fabricate(:following, follower_id: molly.id, user_id: bob.id)
+      bob.is_following.should match_array([f1, f2])
+    end
+  end
 end

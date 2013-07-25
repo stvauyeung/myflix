@@ -36,3 +36,4 @@ Video.find(10).categories << c2
 
 User.create(name: "Joe", email:"joe@joe.com", password: "password")
 User.create(name: "Molly", email:"molly@molly.com", password: "password")
+5.times { Fabricate(:user) }
