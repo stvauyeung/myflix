@@ -4,8 +4,10 @@ describe FollowingsController do
 	before { set_current_user }
 	describe "GET index" do
 		it "sets @followings as user followings" do
+			bob = Fabricate(:user)
+			following = Fabricate(:following, user_id: bob.id, follower_id: current_user.id)
 			get :index
-			expect(assigns[:followings]).to eq(current_user.is_following)
+			expect(assigns[:followings]).to eq([following])
 		end
 		it_behaves_like "require sign in" do
 			let(:action) {get :index}
@@ -18,6 +20,11 @@ describe FollowingsController do
 			set_current_user(peter)
 			delete :destroy, id: following.id
 			expect(Following.count).to eq(0)
+		end
+		it "redirects to people page" do
+			set_current_user(peter)
+			delete :destroy, id: following.id
+			response.should redirect_to followings_path
 		end
 		it "does not destroy following if follower is not current_user" do
 			bob = Fabricate(:user)
@@ -37,10 +44,19 @@ describe FollowingsController do
 		end
 		it "sets current user as follower" do
 			post :create, user_id: joe.id
-			expect(Following.first.follower).to eq(bob)
+			expect(bob.follows?(joe)).to be_true
 		end
 		it_behaves_like "require sign in" do
 			let(:action) { post :create, user_id: joe.id}
+		end
+		it "current user cannot follow themselves" do
+			post :create, user_id: bob.id
+			expect(Following.count).to eq(0)
+		end
+		it "does not create following if current user already following" do
+			Fabricate(:following, user_id: joe.id, follower_id: bob.id)
+			post :create, user_id: joe.id
+			expect(Following.count).to eq(1)
 		end
 	end
 end

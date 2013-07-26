@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   has_many :followings
   has_many :followers, through: :followings
+  has_many :is_following, class_name: "Following", foreign_key: :follower_id
+  has_many :is_followed, class_name: "Following", foreign_key: :user_id
 
   def update_queuings(queuing_updates)
     ActiveRecord::Base.transaction do
@@ -30,11 +32,7 @@ class User < ActiveRecord::Base
     queuings.map(&:video).include?(video)
   end
 
-  def is_following
-    Following.where(follower_id: self.id)
-  end
-
-  def follows?(user)
-    is_following.map(&:user_id).include?(user.id)
+  def follows?(another_user)
+    is_following.map(&:user_id).include?(another_user.id)
   end
 end

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Following do
 	it { should belong_to(:user) }
 	it { should belong_to(:follower).class_name('User') }
+	it { should validate_uniqueness_of(:user_id).scoped_to(:follower_id) }
 
 	describe "#user_name" do
 		it "returns the name of followed user" do

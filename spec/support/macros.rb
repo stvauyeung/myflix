@@ -19,3 +19,8 @@ def sign_in_user(a_user=nil)
 	click_button "Login"
 	expect(page).to have_content "Welcome back"
 end
+
+def click_on_video(video)
+	find("a[href='/videos/#{video.id}']").click
+	page.should have_content(video.title)
+end
