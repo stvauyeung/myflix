@@ -8,8 +8,10 @@ Myflix::Application.routes.draw do
   get '/logout', to: 'sessions#destroy'
   
   get '/register', to: 'users#new'
-  resources :users, :only => [:create]
+  resources :users, :only => [:create, :show]
   resources :queuings, :only => [:create, :index, :destroy]
+  resources :followings, :only => [:create, :index, :destroy]
+  
   put :update_multiple, to: "queuings#update_multiple"
 
   resources :videos, :only => [:show] do

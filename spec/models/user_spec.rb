@@ -13,6 +13,9 @@ describe User do
   it { should have_many(:queuings).order(:position) }
   it { should have_many(:reviews) }
 
+  it { should have_many(:followings) }
+  it { should have_many(:followers).through(:followings)}
+
   describe "#in_queuings?" do
   	it "returns true if video is in user queuings" do
   		user = Fabricate(:user)
@@ -25,5 +28,28 @@ describe User do
   		video = Fabricate(:video)
   		user.in_queuings?(video).should be_false
   	end
+  end
+  describe "#is_following" do
+    it "returns all followings where user is the follower" do
+      bob = Fabricate(:user)
+      molly = Fabricate(:user)
+      joe = Fabricate(:user)
+      f1 = Fabricate(:following, follower_id: bob.id, user_id: molly.id)
+      f2 = Fabricate(:following, follower_id: bob.id, user_id: joe.id)
+      f3 = Fabricate(:following, follower_id: molly.id, user_id: bob.id)
+      bob.is_following.should match_array([f1, f2])
+    end
+  end
+
+  describe "#follows?" do
+    let(:bob) { Fabricate(:user) }
+    let(:molly) { Fabricate(:user) }
+    before { Fabricate(:following, user: bob, follower: molly) }
+    it "returns true of user is following" do
+      molly.follows?(bob).should be_true
+    end
+    it "returns false if user not following " do
+      bob.follows?(molly).should be_false
+    end
   end
 end

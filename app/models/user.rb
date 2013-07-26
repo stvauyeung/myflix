@@ -8,6 +8,11 @@ class User < ActiveRecord::Base
   has_many :reviews
   has_many :queuings, order: :position
 
+  has_many :followings
+  has_many :followers, through: :followings
+  has_many :is_following, class_name: "Following", foreign_key: :follower_id
+  has_many :is_followed, class_name: "Following", foreign_key: :user_id
+
   def update_queuings(queuing_updates)
     ActiveRecord::Base.transaction do
       queuing_updates.each do |hash|
@@ -25,5 +30,9 @@ class User < ActiveRecord::Base
 
   def in_queuings?(video)
     queuings.map(&:video).include?(video)
+  end
+
+  def follows?(another_user)
+    is_following.map(&:user_id).include?(another_user.id)
   end
 end
