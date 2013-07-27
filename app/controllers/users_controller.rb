@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
+      AppMailer.welcome_email(@user).deliver
       redirect_to home_path
     else
       flash.now[:error] = "#{@user.errors.full_messages}"
