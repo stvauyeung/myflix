@@ -24,5 +24,3 @@ module Myflix
     end
   end
 end
-
-config.action_mailer.default_url_options = { host: 'obscure-fortress-6144.herokuapp.com' }
