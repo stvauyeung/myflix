@@ -37,6 +37,23 @@ describe UsersController do
         expect(response).to render_template(:new)
       end
     end
+
+    context "email sending" do
+      it "sends out an email" do
+        post :create, :user => {name: "Joe", email: "j@joe.com", password: "password"}
+        ActionMailer::Base.deliveries.should_not be_empty
+      end
+      it "sends to new user" do
+        post :create, :user => {name: "Joe", email: "j@joe.com", password: "password"}
+        message = ActionMailer::Base.deliveries.last
+        message.to.should eq(["j@joe.com"])
+      end
+      it "has the right content" do
+        post :create, :user => {name: "Joe", email: "j@joe.com", password: "password"}
+        message = ActionMailer::Base.deliveries.last
+        message.html_part.body.should include "Welcome to Myflix, Joe"
+      end
+    end
   end
 
   describe "GET show" do

@@ -16,7 +16,6 @@ end
 group :development do
   gem 'sqlite3'
   gem 'pry-nav'
-  gem 'letter_opener'
 end
 
 group :test do
@@ -28,6 +27,7 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'fabrication'
+  gem 'letter_opener'
   gem 'faker'
   gem 'pry'
 end
