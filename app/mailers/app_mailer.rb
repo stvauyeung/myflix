@@ -1,5 +1,5 @@
 class AppMailer < ActionMailer::Base
-	default from: 'auyeung.chi.kit@gmail.com'
+	default from: 'myflix88@gmail.com'
 
 	def welcome_email(new_user)
 		@user = new_user
