@@ -49,7 +49,16 @@ Myflix::Application.configure do
   # config.assets.precompile += %w( search.js )
 
   # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    user_name:            ENV["myflix88"],
+    password:             ENV["tw3ntytw3nty"],
+    authentication:       'plain',
+    enable_starttls_auto: true  }
+  config.action_mailer.perform_deliveries = true
 
   # Enable threaded mode
   # config.threadsafe!
@@ -64,13 +73,4 @@ Myflix::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'www.gmail.com',
-    user_name:            'myflix88',
-    password:             'tw3ntytw3nty',
-    authentication:       'plain',
-    enable_starttls_auto: true  }
 end
