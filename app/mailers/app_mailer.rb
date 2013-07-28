@@ -4,6 +4,6 @@ class AppMailer < ActionMailer::Base
 	def welcome_email(new_user)
 		@user = new_user
 		@url = home_path
-		mail(to: @user.email, subject: "Holy moly, you joined Myflix. What's next?")
+		mail(to: "#{@user.email}", subject: "Holy moly, you joined Myflix. What's next?")
 	end
 end
