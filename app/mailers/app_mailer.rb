@@ -6,4 +6,9 @@ class AppMailer < ActionMailer::Base
 		@url = home_path
 		mail(to: "#{@user.email}", subject: "Holy moly, you joined Myflix. What's next?")
 	end
+
+	def password_reset_email(existing_user)
+		@user = existing_user
+		mail(to: "#{@user.email}", subject: "MyFlix password reset instructions")
+	end
 end

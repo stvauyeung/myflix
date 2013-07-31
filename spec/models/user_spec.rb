@@ -16,6 +16,11 @@ describe User do
   it { should have_many(:followings) }
   it { should have_many(:followers).through(:followings)}
 
+  it "generates a user token when user is created" do
+    alice = Fabricate(:user)
+    alice.token.should be_present
+  end
+
   describe "#in_queuings?" do
   	it "returns true if video is in user queuings" do
   		user = Fabricate(:user)
