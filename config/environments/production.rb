@@ -60,6 +60,7 @@ Myflix::Application.configure do
   }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { host: 'obscure-fortress-6144.herokuapp.com'}
 
   # Enable threaded mode
   # config.threadsafe!
