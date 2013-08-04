@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     queuings.map(&:video).include?(video)
   end
 
+  def follow(another_user)
+    is_following.create(user_id: another_user.id) unless self.follows?(another_user) || self == another_user
+  end
+
   def follows?(another_user)
     is_following.map(&:user_id).include?(another_user.id)
   end

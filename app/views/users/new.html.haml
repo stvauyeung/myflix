@@ -9,5 +9,6 @@
           =f.text_field :email
           =f.password_field :password
           =f.password_field :password_confirmation, label: "Confirm Password"
+          = hidden_field_tag :invitation_token, @invitation_token
           =f.actions do
             =f.secondary "Register"

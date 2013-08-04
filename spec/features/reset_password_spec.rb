@@ -14,7 +14,9 @@ feature "User resets password" do
 		click_email_link
 				
 		fill_new_password_form('new_password')
-		login_with_new_password('new_password')		
+		login_with_new_password('new_password')
+
+		clear_email
 	end
 
 	def click_forgot_password

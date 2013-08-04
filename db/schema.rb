@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130731032407) do
+ActiveRecord::Schema.define(:version => 20130803072625) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(:version => 20130731032407) do
     t.integer  "follower_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "invitations", :force => true do |t|
+    t.integer  "inviter_id"
+    t.string   "recipient_name"
+    t.string   "recipient_email"
+    t.text     "message"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "token"
   end
 
   create_table "queuings", :force => true do |t|
@@ -55,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20130731032407) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "token"
+    t.string   "auth_token"
   end
 
   create_table "videos", :force => true do |t|
