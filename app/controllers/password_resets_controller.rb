@@ -27,6 +27,6 @@ class PasswordResetsController < ApplicationController
 	def reset_password(user)
 		user.password = params[:password]
 		user.update_column(:token, SecureRandom.urlsafe_base64)
-		user.save
+		user.save!
 	end
 end
