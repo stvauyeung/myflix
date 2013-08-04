@@ -14,7 +14,7 @@ class AppMailer < ActionMailer::Base
 
 	def invite_friend_email(invitation)
 		@invitation = invitation
-		mail(from: @invitation.inviter.name,
+		mail(from: @invitation.inviter.email,
 				 to: @invitation.recipient_email,
 				 subject: "#{@invitation.recipient_name}, you've been invite to Myflix!",
 				 )
