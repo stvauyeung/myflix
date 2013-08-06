@@ -4,7 +4,7 @@ class PasswordResetsController < ApplicationController
 		if user
 			@token = params[:id]
 		else
-			redirect_to expired_token_path
+			redirect_to expired_link_path
 		end
 	end
 
@@ -15,7 +15,7 @@ class PasswordResetsController < ApplicationController
 			flash[:success] = "Your password has been reset"
 			redirect_to login_path
 		else
-			redirect_to expired_token_path
+			redirect_to expired_link_path
 		end
 	end
 
@@ -26,7 +26,7 @@ class PasswordResetsController < ApplicationController
 
 	def reset_password(user)
 		user.password = params[:password]
-		user.generate_token
-		user.save	
+		user.update_column(:token, SecureRandom.urlsafe_base64)
+		user.save!
 	end
 end

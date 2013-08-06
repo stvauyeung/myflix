@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Tokenable
   validates_presence_of :name, :email
   validates :email, uniqueness: true, format: { :with => /@/, :on => :create}
 
@@ -12,8 +13,6 @@ class User < ActiveRecord::Base
   has_many :followers, through: :followings
   has_many :is_following, class_name: "Following", foreign_key: :follower_id
   has_many :is_followed, class_name: "Following", foreign_key: :user_id
-
-  before_create :generate_token
 
   def update_queuings(queuing_updates)
     ActiveRecord::Base.transaction do
@@ -34,11 +33,11 @@ class User < ActiveRecord::Base
     queuings.map(&:video).include?(video)
   end
 
-  def follows?(another_user)
-    is_following.map(&:user_id).include?(another_user.id)
+  def follow(another_user)
+    is_following.create(user_id: another_user.id) unless self.follows?(another_user) || self == another_user
   end
 
-  def generate_token
-    self.token = SecureRandom.urlsafe_base64
+  def follows?(another_user)
+    is_following.map(&:user_id).include?(another_user.id)
   end
 end

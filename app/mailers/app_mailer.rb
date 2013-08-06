@@ -11,4 +11,12 @@ class AppMailer < ActionMailer::Base
 		@user = existing_user
 		mail(to: "#{@user.email}", subject: "MyFlix password reset instructions")
 	end
+
+	def invite_friend_email(invitation)
+		@invitation = invitation
+		mail(from: @invitation.inviter.email,
+				 to: @invitation.recipient_email,
+				 subject: "#{@invitation.recipient_name}, you've been invite to Myflix!",
+				 )
+	end
 end

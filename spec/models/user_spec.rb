@@ -16,9 +16,8 @@ describe User do
   it { should have_many(:followings) }
   it { should have_many(:followers).through(:followings)}
 
-  it "generates a user token when user is created" do
-    alice = Fabricate(:user)
-    alice.token.should be_present
+  it_behaves_like "tokenable" do
+    let(:object) { Fabricate(:user) }
   end
 
   describe "#in_queuings?" do
@@ -55,6 +54,20 @@ describe User do
     end
     it "returns false if user not following " do
       bob.follows?(molly).should be_false
+    end
+  end
+
+  describe "#follow" do
+    it "follows another user" do
+      molly = Fabricate(:user)
+      joe = Fabricate(:user)
+      molly.follow(joe)
+      expect(molly.follows?(joe)).to be_true
+    end
+    it "does not follow self" do
+      joe = Fabricate(:user)
+      joe.follow(joe)
+      expect(joe.follows?(joe)).to be_false
     end
   end
 end
