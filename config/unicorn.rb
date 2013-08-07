@@ -10,6 +10,10 @@ before_fork do |server, worker|
 
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
+end
+
+before_fork do |server, worker|
+   @sidekiq_pid ||= spawn("bundle exec sidekiq -c 2")
 end 
 
 after_fork do |server, worker|
