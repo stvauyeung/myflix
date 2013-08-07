@@ -199,6 +199,7 @@ DEPENDENCIES
   pry
   pry-nav
   rails (= 3.2.11)
+  redis
   rspec-rails
   sass-rails (~> 3.2.3)
   shoulda-matchers
