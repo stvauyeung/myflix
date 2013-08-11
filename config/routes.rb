@@ -11,9 +11,9 @@ Myflix::Application.routes.draw do
   
   resources :users, :only => [:create, :show]
   namespace :admin do
-    resources :users, only: [:index]
+    resources :users, only: [:index, :show]
   end
-  
+
   put :update_multiple, to: "queuings#update_multiple"
   resources :queuings, :only => [:create, :index, :destroy]
   resources :followings, :only => [:create, :index, :destroy]
