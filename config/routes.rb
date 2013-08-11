@@ -1,6 +1,5 @@
 Myflix::Application.routes.draw do
   root to: 'static#front'
-  get '/home', to: 'videos#index'
   get 'ui(/:action)', controller: 'ui'
 
   get '/login', to: 'sessions#new'
@@ -14,7 +13,8 @@ Myflix::Application.routes.draw do
   resources :followings, :only => [:create, :index, :destroy]
   
   put :update_multiple, to: "queuings#update_multiple"
-
+  
+  get '/home', to: 'videos#index'
   resources :videos, :only => [:show] do
     resources :reviews, :only => [:create]
     collection { post :search, to: "videos#search" }
