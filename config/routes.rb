@@ -8,11 +8,15 @@ Myflix::Application.routes.draw do
   
   get '/register', to: 'users#new'
   get '/register/:token', to: 'users#new_with_invitation_token', as: 'register_with_token'
+  
   resources :users, :only => [:create, :show]
-  resources :queuings, :only => [:create, :index, :destroy]
-  resources :followings, :only => [:create, :index, :destroy]
+  namespace :admin do
+    resources :users, only: [:index]
+  end
   
   put :update_multiple, to: "queuings#update_multiple"
+  resources :queuings, :only => [:create, :index, :destroy]
+  resources :followings, :only => [:create, :index, :destroy]
   
   get '/home', to: 'videos#index'
   resources :videos, :only => [:show] do

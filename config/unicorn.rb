@@ -13,7 +13,7 @@ before_fork do |server, worker|
 end
 
 before_fork do |server, worker|
-   @sidekiq_pid ||= spawn("bundle exec sidekiq -c 2")
+  @sidekiq_pid ||= spawn("bundle exec sidekiq -c 2")
 end 
 
 after_fork do |server, worker|
