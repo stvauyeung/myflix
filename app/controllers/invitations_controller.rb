@@ -8,7 +8,7 @@ class InvitationsController < ApplicationController
 	def create
 		@invitation = Invitation.create(params[:invitation].merge!(inviter_id: current_user.id))
 		if @invitation.save
-			AppMailer.invite_friend_email(@invitation).deliver
+			AppMailer.delay.invite_friend_email(@invitation)
 			flash[:success] = "Thanks for sharing Myflix with #{@invitation.recipient_name}!"
 			redirect_to invitations_path
 		else
