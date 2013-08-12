@@ -6,6 +6,10 @@ class Admin::VideosController < ApplicationController
 		@video = Video.new
 	end
 
+	def create
+		
+	end
+
 	private
 
 	def require_admin

@@ -9,6 +9,7 @@ gem 'figaro'
 gem 'sidekiq'
 gem 'redis'
 gem 'unicorn'
+gem 'carrierwave'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

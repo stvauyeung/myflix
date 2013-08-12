@@ -22,4 +22,16 @@ describe Admin::VideosController do
 			expect(flash[:error]).to be_present
 		end
 	end
+
+	describe "POST create" do
+		it_behaves_like "require sign in" do
+			let(:action) { post :create }
+		end
+
+		it "redirects normal user to home path" do
+			set_current_user
+			post :create
+			response.should redirect_to home_path
+		end
+	end
 end

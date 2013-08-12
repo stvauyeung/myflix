@@ -12,11 +12,7 @@
             = f.text_field :title, class: "span3"
             = f.select :categorizations, options_for_select(Category.all.map { |category| [category.name, category.id] })
             = f.text_area :description, rows: 8, class: "span6"
-            .control-group
-              %label.control-label Large Cover
-              .controls
-                %span.btn.btn-file
-                  %input(type="file")
+            = f.file_field :image
             .control-group
               %label.control-label Small Cover
               .controls
