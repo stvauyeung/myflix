@@ -22,7 +22,7 @@ class Admin::VideosController < ApplicationController
 
 	def require_admin
 		if !current_user.admin
-			flash[:error] = "You do not have permissions required for that page."
+			flash[:error] = "You do not have permissions for that page."
 			redirect_to home_path
 		end
 	end
