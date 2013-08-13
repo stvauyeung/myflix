@@ -2,7 +2,8 @@ class Video < ActiveRecord::Base
   has_many :categorizations
   has_many :categories, through: :categorizations
   has_many :reviews, order: "created_at DESC"
-  mount_uploader :image, ImageUploader
+  mount_uploader :large_cover, LargeCoverUploader
+  mount_uploader :small_cover, SmallCoverUploader
 
   validates_presence_of :title, :description
   validates_uniqueness_of :title
