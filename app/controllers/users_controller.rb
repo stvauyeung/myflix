@@ -6,13 +6,14 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
+    handle_stripe_payment
     if @user.save
       handle_invitation
       AppMailer.welcome_email(@user).deliver
       session[:user_id] = @user.id
+      flash[:success] = "Welcome to MyFlix #{@user.name}!"
       redirect_to home_path
     else
-      flash.now[:error] = "#{@user.errors.full_messages}"
       render :new
     end
   end
@@ -42,6 +43,22 @@ class UsersController < ApplicationController
       @user.follow(invitation.inviter)
       invitation.inviter.follow(@user)
       invitation.update_column(:token, nil)
+    end 
+  end
+
+  def handle_stripe_payment
+    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    token = params[:stripeToken]
+    begin
+      charge = Stripe::Charge.create(
+        :amount => 999,
+        :currency => "usd",
+        :card => token,
+        :description => "#{@user.name} payment"
+      )
+    rescue Stripe::CardError => e
+      flash[:error] = "Sorry, your registration failed due to: #{e.message}"
+      render :new and return
     end 
   end
 end
