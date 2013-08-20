@@ -9,6 +9,10 @@ describe UsersController do
   end
 
   describe "POST create" do
+    before do
+      StripeWrapper::Charge.stub(:create) { true }
+    end
+    
     it "creates a new instance of User" do
       post :create
       expect(assigns(:user)).to be_a_new(User)

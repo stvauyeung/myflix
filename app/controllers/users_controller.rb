@@ -8,10 +8,6 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     token = params[:stripeToken]
     charge = StripeWrapper::Charge.create(amount: 999, card: token, description: "#{@user.email} registration fee")
-    if charge.failed?
-      flash[:error] = charge.error_message
-      render :new and return
-    end
     if @user.save && charge
       handle_invitation
       AppMailer.welcome_email(@user).deliver

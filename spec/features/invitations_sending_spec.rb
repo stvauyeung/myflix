@@ -2,19 +2,19 @@ require 'spec_helper'
 
 feature "User invites a friend" do
 	let(:jason) { Fabricate(:user, name: 'Jason') }
-	scenario "User sends an invitation" do
+	scenario "User sends an invitation", { js:true, vcr: true } do
 		sign_in_user(jason)
 
 		click_invite_friends
 		submit_invite_form('Paul', 'paul@example.com')
-		click_link 'Sign Out'
+		visit '/logout'
 
 		open_invite_email('Paul', 'paul@example.com')
 		register_user('Paul')
 
 		expect_following('Jason')
 
-		click_link 'Sign Out'
+		visit '/logout'
 		sign_in_user(jason)
 		
 		expect_following('Paul')
@@ -23,7 +23,7 @@ feature "User invites a friend" do
 	end
 
 	def click_invite_friends
-		click_link 'Invite Friends'
+		visit '/invitations'
 		page.should have_content 'Invite a friend to join MyFlix!'	
 	end
 
@@ -46,7 +46,11 @@ feature "User invites a friend" do
 		fill_in 'Full Name', with: name
 		fill_in 'Password', with: password
 		fill_in 'Confirm Password', with: password
-		click_button 'Register'
+		fill_in 'Credit Card Number', with: '4242424242424242'
+		fill_in 'Security Code', with: '345'
+		select '9 - September', from: 'date_month'
+		select '2016', from: 'date_year'
+		click_button 'Sign Up'
 		page.should have_content "Welcome, #{name}"	
 	end
 
