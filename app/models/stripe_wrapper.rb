@@ -21,8 +21,8 @@ module StripeWrapper
 			end
 		end
 
-		def failed?
-			status == :error
+		def successful?
+			status == :success
 		end
 
 		def error_message

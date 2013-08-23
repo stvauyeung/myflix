@@ -17,7 +17,7 @@ describe StripeWrapper::Charge do
 		let(:card_number) { '4242424242424242' }
 		it "charges the card successfully" do
 			response = StripeWrapper::Charge.create(amount: 300, card: token, description: 'test charge')
-			response.should_not be_failed
+			response.should be_successful
 		end
 	end
 	
@@ -25,7 +25,7 @@ describe StripeWrapper::Charge do
 		let(:card_number) { '4000000000000002' }
 		let(:response) { StripeWrapper::Charge.create(amount: 300, card: token, description: 'test charge') }
 		it "does not charge the card successfully", :vcr do
-			response.should be_failed
+			response.should_not be_successful
 		end
 		it "contains an error message", :vcr do
 			response.error_message.should be_present
