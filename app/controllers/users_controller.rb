@@ -6,14 +6,23 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    charge = handle_stripe_payment(@user, params[:stripeToken])
-    if @user.save && charge
-      handle_invitation
-      AppMailer.welcome_email(@user).deliver
-      session[:user_id] = @user.id
-      flash[:success] = "Welcome to MyFlix #{@user.name}!"
-      redirect_to home_path
+    if @user.valid?
+      charge = StripeWrapper::Charge.create(
+        amount: 999,
+        card: params[:stripeToken],
+        description: "#{@user.email} registration fee"
+        )
+      if charge.successful?
+        @user.save
+        handle_invitation
+        AppMailer.welcome_email(@user).deliver
+        session[:user_id] = @user.id
+        flash[:success] = "Welcome to MyFlix #{@user.name}!"
+        redirect_to home_path  
+      else
+        flash[:error] = charge.error_message
+        render :new
+      end
     else
       render :new
     end
@@ -44,20 +53,6 @@ class UsersController < ApplicationController
       @user.follow(invitation.inviter)
       invitation.inviter.follow(@user)
       invitation.update_column(:token, nil)
-    end 
-  end
-
-  def handle_stripe_payment(user, token)
-   begin
-      Stripe::Charge.create(
-        :amount => 999,
-        :currency => "usd",
-        :card => token,
-        :description => "#{user.email} signup payment"
-      )
-    rescue Stripe::CardError => e
-      flash[:error] = "Your card was not processed due to: #{e.message}"
-      return false
     end 
   end
 end

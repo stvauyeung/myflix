@@ -1,0 +1,121 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/tokens
+    body:
+      encoding: US-ASCII
+      string: card[number]=4242424242424242&card[exp_month]=8&card[exp_year]=2016&card[cvc]=314
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.8.5
+      Authorization:
+      - Bearer sk_test_b6kw9BBDNfGwTxQ0mIsQh0dB
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - ! '{"bindings_version":"1.8.5","lang":"ruby","lang_version":"1.9.3 p194 (2012-04-20)","platform":"x86_64-darwin11.4.0","publisher":"stripe","uname":"Darwin
+        Stephens-MacBook-Pro-2.local 11.2.0 Darwin Kernel Version 11.2.0: Tue Aug  9
+        20:54:00 PDT 2011; root:xnu-1699.24.8~1/RELEASE_X86_64 x86_64"}'
+      Content-Length:
+      - '81'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 Aug 2013 06:25:25 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '550'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Cache-Control:
+      - no-cache, no-store
+      Access-Control-Max-Age:
+      - '300'
+    body:
+      encoding: US-ASCII
+      string: ! "{\n  \"id\": \"tok_2PbJyx4waGqAfL\",\n  \"livemode\": false,\n  \"created\":
+        1376893525,\n  \"used\": false,\n  \"object\": \"token\",\n  \"type\": \"card\",\n
+        \ \"card\": {\n    \"id\": \"card_2PbJXWieqgJNyL\",\n    \"object\": \"card\",\n
+        \   \"last4\": \"4242\",\n    \"type\": \"Visa\",\n    \"exp_month\": 8,\n
+        \   \"exp_year\": 2016,\n    \"fingerprint\": \"I3rI5FeqnwY9lE0k\",\n    \"customer\":
+        null,\n    \"country\": \"US\",\n    \"name\": null,\n    \"address_line1\":
+        null,\n    \"address_line2\": null,\n    \"address_city\": null,\n    \"address_state\":
+        null,\n    \"address_zip\": null,\n    \"address_country\": null\n  }\n}\n"
+    http_version: 
+  recorded_at: Mon, 19 Aug 2013 06:25:28 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/charges
+    body:
+      encoding: US-ASCII
+      string: amount=300&currency=usd&card=tok_2PbJyx4waGqAfL&description=test%20charge
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.8.5
+      Authorization:
+      - Bearer sk_test_b6kw9BBDNfGwTxQ0mIsQh0dB
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - ! '{"bindings_version":"1.8.5","lang":"ruby","lang_version":"1.9.3 p194 (2012-04-20)","platform":"x86_64-darwin11.4.0","publisher":"stripe","uname":"Darwin
+        Stephens-MacBook-Pro-2.local 11.2.0 Darwin Kernel Version 11.2.0: Tue Aug  9
+        20:54:00 PDT 2011; root:xnu-1699.24.8~1/RELEASE_X86_64 x86_64"}'
+      Content-Length:
+      - '73'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 Aug 2013 06:25:27 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '928'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-cache, no-store
+      Access-Control-Max-Age:
+      - '300'
+      Access-Control-Allow-Credentials:
+      - 'true'
+    body:
+      encoding: US-ASCII
+      string: ! "{\n  \"id\": \"ch_2PbJg6p134rO4B\",\n  \"object\": \"charge\",\n
+        \ \"created\": 1376893526,\n  \"livemode\": false,\n  \"paid\": true,\n  \"amount\":
+        300,\n  \"currency\": \"usd\",\n  \"refunded\": false,\n  \"card\": {\n    \"id\":
+        \"card_2PbJXWieqgJNyL\",\n    \"object\": \"card\",\n    \"last4\": \"4242\",\n
+        \   \"type\": \"Visa\",\n    \"exp_month\": 8,\n    \"exp_year\": 2016,\n
+        \   \"fingerprint\": \"I3rI5FeqnwY9lE0k\",\n    \"customer\": null,\n    \"country\":
+        \"US\",\n    \"name\": null,\n    \"address_line1\": null,\n    \"address_line2\":
+        null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\":
+        null,\n    \"address_country\": null,\n    \"cvc_check\": \"pass\",\n    \"address_line1_check\":
+        null,\n    \"address_zip_check\": null\n  },\n  \"captured\": true,\n  \"refunds\":
+        [],\n  \"balance_transaction\": \"txn_2PbJRm3k6HnEuj\",\n  \"failure_message\":
+        null,\n  \"failure_code\": null,\n  \"amount_refunded\": 0,\n  \"customer\":
+        null,\n  \"invoice\": null,\n  \"description\": \"test charge\",\n  \"dispute\":
+        null\n}\n"
+    http_version: 
+  recorded_at: Mon, 19 Aug 2013 06:25:29 GMT
+recorded_with: VCR 2.5.0

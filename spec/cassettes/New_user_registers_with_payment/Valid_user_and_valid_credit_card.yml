@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/charges
+    body:
+      encoding: US-ASCII
+      string: amount=999&currency=usd&card=tok_2QL0SopalQlDnc&description=bobbybob%40bob.com%20registration%20fee
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.8.5
+      Authorization:
+      - Bearer sk_test_b6kw9BBDNfGwTxQ0mIsQh0dB
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - ! '{"bindings_version":"1.8.5","lang":"ruby","lang_version":"1.9.3 p194 (2012-04-20)","platform":"x86_64-darwin11.4.2","publisher":"stripe","uname":"Darwin
+        Stephens-MacBook-Pro-2.local 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug
+        23 16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64"}'
+      Content-Length:
+      - '99'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 21 Aug 2013 05:39:06 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '950'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Cache-Control:
+      - no-cache, no-store
+      Access-Control-Max-Age:
+      - '300'
+    body:
+      encoding: US-ASCII
+      string: ! "{\n  \"id\": \"ch_2QL0eRxvg91Tnm\",\n  \"object\": \"charge\",\n
+        \ \"created\": 1377063546,\n  \"livemode\": false,\n  \"paid\": true,\n  \"amount\":
+        999,\n  \"currency\": \"usd\",\n  \"refunded\": false,\n  \"card\": {\n    \"id\":
+        \"card_2QL02h9MwECN7W\",\n    \"object\": \"card\",\n    \"last4\": \"4242\",\n
+        \   \"type\": \"Visa\",\n    \"exp_month\": 7,\n    \"exp_year\": 2016,\n
+        \   \"fingerprint\": \"I3rI5FeqnwY9lE0k\",\n    \"customer\": null,\n    \"country\":
+        \"US\",\n    \"name\": null,\n    \"address_line1\": null,\n    \"address_line2\":
+        null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\":
+        null,\n    \"address_country\": null,\n    \"cvc_check\": \"pass\",\n    \"address_line1_check\":
+        null,\n    \"address_zip_check\": null\n  },\n  \"captured\": true,\n  \"refunds\":
+        [],\n  \"balance_transaction\": \"txn_2QL0zdsXCxtZif\",\n  \"failure_message\":
+        null,\n  \"failure_code\": null,\n  \"amount_refunded\": 0,\n  \"customer\":
+        null,\n  \"invoice\": null,\n  \"description\": \"bobbybob@bob.com registration
+        fee\",\n  \"dispute\": null\n}\n"
+    http_version: 
+  recorded_at: Wed, 21 Aug 2013 05:39:06 GMT
+recorded_with: VCR 2.5.0
