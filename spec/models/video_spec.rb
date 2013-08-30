@@ -37,13 +37,13 @@ describe Video do
     end
   end
 
-  describe "#average_rating" do
+  describe "#rating" do
     let(:video) { Fabricate(:video) }
-    let(:subject) { video.average_rating }
+    let(:subject) { video.rating }
     let(:r1) { Fabricate(:review) }
     let(:r2) { Fabricate(:review) }
     it "returns 'not rated' if no ratings" do
-      subject.should eq("Not Rated")
+      subject.should be_nil
     end
     it "returns rating if one review" do
       video.reviews << r1
@@ -51,7 +51,7 @@ describe Video do
     end
     it "returns average of ratings if multiple reviews" do
       video.reviews << [r1, r2]
-      subject.should eq((r1.rating + r2.rating)/2)
+      subject.should eq(((r1.rating + r2.rating)/2).round(1))
     end
   end
 end
