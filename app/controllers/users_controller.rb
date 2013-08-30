@@ -6,24 +6,13 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    if @user.valid?
-      charge = StripeWrapper::Charge.create(
-        amount: 999,
-        card: params[:stripeToken],
-        description: "#{@user.email} registration fee"
-        )
-      if charge.successful?
-        @user.save
-        handle_invitation
-        AppMailer.welcome_email(@user).deliver
-        session[:user_id] = @user.id
-        flash[:success] = "Welcome to MyFlix #{@user.name}!"
-        redirect_to home_path  
-      else
-        flash[:error] = charge.error_message
-        render :new
-      end
+    result = Registration.new(@user).sign_up(params[:stripeToken], params[:invitation_token])
+    if result.successful?
+      session[:user_id] = @user.id
+      flash[:success] = "Welcome to MyFlix #{@user.name}!"
+      redirect_to home_path  
     else
+      flash[:error] = result.error_message
       render :new
     end
   end
@@ -43,16 +32,5 @@ class UsersController < ApplicationController
     else
       redirect_to expired_link_path
     end
-  end
-
-  private
-
-  def handle_invitation
-    if params[:invitation_token].present?
-      invitation = Invitation.find_by_token(params[:invitation_token])
-      @user.follow(invitation.inviter)
-      invitation.inviter.follow(@user)
-      invitation.update_column(:token, nil)
-    end 
   end
 end
