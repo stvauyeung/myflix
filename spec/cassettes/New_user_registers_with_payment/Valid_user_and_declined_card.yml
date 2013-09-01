@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.stripe.com/v1/charges
+    uri: https://api.stripe.com/v1/customers
     body:
       encoding: US-ASCII
-      string: amount=999&currency=usd&card=tok_2QiSs75pbuDcRP&description=bob%40bob.com%20registration%20fee
+      string: email=bob%40bob.com&card=tok_2UhEdgcglgwJnl&plan=myflix
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
@@ -22,7 +22,7 @@ http_interactions:
         Stephens-MacBook-Pro-2.local 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug
         23 16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64"}'
       Content-Length:
-      - '94'
+      - '55'
   response:
     status:
       code: 402
@@ -31,11 +31,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Thu, 22 Aug 2013 05:52:36 GMT
+      - Sun, 01 Sep 2013 20:53:19 GMT
       Content-Type:
       - application/json;charset=utf-8
       Content-Length:
-      - '152'
+      - '117'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -47,8 +47,7 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! "{\n  \"error\": {\n    \"message\": \"Your card was declined.\",\n
-        \   \"type\": \"card_error\",\n    \"code\": \"card_declined\",\n    \"charge\":
-        \"ch_2QiSoo0H40tD4B\"\n  }\n}\n"
+        \   \"type\": \"card_error\",\n    \"code\": \"card_declined\"\n  }\n}\n"
     http_version: 
-  recorded_at: Thu, 22 Aug 2013 05:52:36 GMT
+  recorded_at: Sun, 01 Sep 2013 20:53:18 GMT
 recorded_with: VCR 2.5.0
