@@ -13,6 +13,7 @@ class Registration
           user: @user
           )
       if customer.successful?
+        @user.customer_token = customer.customer_token
         @user.save
         handle_invitation(invitation_token)
         AppMailer.welcome_email(@user).deliver

@@ -4,7 +4,7 @@ describe Registration do
 	describe "#registration" do
 		context "valid personal info and valid card" do
 			before do
-        customer = double(:customer, successful?: true)
+        customer = double(:customer, successful?: true, customer_token: "abcdefg")
         StripeWrapper::Customer.should_receive(:create).and_return(customer)
       end
       after do
@@ -14,6 +14,11 @@ describe Registration do
 			it "saves new user in db" do
         Registration.new(Fabricate.build(:user)).sign_up("stripetoken", nil)
         expect(User.count).to eq(1)
+      end
+
+      it "stores the customer token from stripe" do
+        Registration.new(Fabricate.build(:user)).sign_up("stripetoken", nil)
+        expect(User.first.customer_token).to eq("abcdefg")
       end
       it "makes the user follow the inviter" do
         alice = Fabricate(:user)
