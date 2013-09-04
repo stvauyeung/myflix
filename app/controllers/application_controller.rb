@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
   helper_method :current_user, :logged_in?, :admin?
 
   def current_user
@@ -12,7 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin?
-    !!current_user.admin
+    current_user.admin?
   end
 
   def require_user
