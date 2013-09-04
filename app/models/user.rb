@@ -40,4 +40,8 @@ class User < ActiveRecord::Base
   def follows?(another_user)
     is_following.map(&:user_id).include?(another_user.id)
   end
+
+  def deactivate!
+    update_column(:active, false)
+  end
 end

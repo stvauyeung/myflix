@@ -51,7 +51,7 @@ describe Video do
     end
     it "returns average of ratings if multiple reviews" do
       video.reviews << [r1, r2]
-      subject.should eq(((r1.rating + r2.rating)/2).round(1))
+      subject.should eq(((r1.rating + r2.rating)/2.0).round(1))
     end
   end
 end

@@ -22,7 +22,6 @@ def sign_in_user(a_user=nil)
 	fill_in "Email", with: user.email
 	fill_in "Password", with: user.password
 	click_button "Login"
-	expect(page).to have_content "Welcome back"
 end
 
 def click_on_video(video)

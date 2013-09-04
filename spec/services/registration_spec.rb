@@ -4,8 +4,8 @@ describe Registration do
 	describe "#registration" do
 		context "valid personal info and valid card" do
 			before do
-        charge = double(:charge, successful?: true)
-        StripeWrapper::Charge.should_receive(:create).and_return(charge)
+        customer = double(:customer, successful?: true, customer_token: "abcdefg")
+        StripeWrapper::Customer.should_receive(:create).and_return(customer)
       end
       after do
       	ActionMailer::Base.deliveries.clear
@@ -14,6 +14,11 @@ describe Registration do
 			it "saves new user in db" do
         Registration.new(Fabricate.build(:user)).sign_up("stripetoken", nil)
         expect(User.count).to eq(1)
+      end
+
+      it "stores the customer token from stripe" do
+        Registration.new(Fabricate.build(:user)).sign_up("stripetoken", nil)
+        expect(User.first.customer_token).to eq("abcdefg")
       end
       it "makes the user follow the inviter" do
         alice = Fabricate(:user)
@@ -54,8 +59,8 @@ describe Registration do
 
 		context "with valid personal info and declined card" do
       before do
-        charge = double(:charge, successful?: false, error_message: 'message')
-        StripeWrapper::Charge.should_receive(:create).and_return(charge)
+        customer = double(:customer, successful?: false, error_message: 'message')
+        StripeWrapper::Customer.should_receive(:create).and_return(customer)
       end
       it "does not create a new user" do
         Registration.new(Fabricate.build(:user)).sign_up("stripetoken", nil)
@@ -69,7 +74,7 @@ describe Registration do
         expect(User.count).to eq(0)
       end
       it "does not charge the credit card" do
-        StripeWrapper::Charge.should_not_receive(:create)
+        StripeWrapper::Customer.should_not_receive(:create)
         Registration.new(User.new(email: "joe@joe.com", password: "password")).sign_up("stripetoken", nil)
       end
       it "does not set out email" do

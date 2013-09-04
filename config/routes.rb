@@ -12,6 +12,7 @@ Myflix::Application.routes.draw do
   resources :users, :only => [:create, :show]
   namespace :admin do
     resources :videos, only: [:new, :create]
+    resources :payments, only: [:index]
   end
 
   put :update_multiple, to: "queuings#update_multiple"
@@ -35,4 +36,6 @@ Myflix::Application.routes.draw do
 
   get 'invitations', to: 'invitations#new'
   resources :invitations, :only => [:create]
+
+  mount StripeEvent::Engine => '/stripe_events'
 end

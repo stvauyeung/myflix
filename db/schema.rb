@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130814005636) do
+ActiveRecord::Schema.define(:version => 20130904190127) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -41,6 +41,12 @@ ActiveRecord::Schema.define(:version => 20130814005636) do
     t.string   "token"
   end
 
+  create_table "payments", :force => true do |t|
+    t.integer "user_id"
+    t.integer "amount"
+    t.string  "reference_id"
+  end
+
   create_table "queuings", :force => true do |t|
     t.integer  "video_id"
     t.integer  "user_id"
@@ -62,11 +68,13 @@ ActiveRecord::Schema.define(:version => 20130814005636) do
     t.string   "name"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.string   "token"
     t.string   "auth_token"
     t.boolean  "admin"
+    t.string   "customer_token"
+    t.boolean  "active",          :default => true
   end
 
   create_table "videos", :force => true do |t|
