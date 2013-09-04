@@ -1,4 +1,4 @@
-Stripe.api_key = Rails.env.production? ? ENV['STRIPE_SECRET_KEY'] : ENV['STRIPE_TEST_SECRET']
+Stripe.api_key = Rails.env.production? ? ENV['STRIPE_PUBLIC_KEY'] : ENV['STRIPE_TEST_SECRET']
 
 StripeEvent.setup do
   subscribe 'charge.succeeded' do |event|
